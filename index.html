@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Agent Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Animated BG -->
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+  <div class="scan-line"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-badge">[ SYS_TOOL v2.4.1 ]</div>
+      <h1 class="title">
+        <span class="title-bracket">&lt;</span>
+        Random User Agent Generator
+        <span class="title-bracket">/&gt;</span>
+      </h1>
+      <p class="subtitle">Generate realistic browser and device user agents instantly</p>
+      <div class="header-line"></div>
+    </header>
+
+    <!-- Controls Card -->
+    <div class="card controls-card">
+      <div class="card-label">// CONFIGURATION MATRIX</div>
+
+      <div class="filters-grid">
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <span class="label-dot"></span>DEVICE / OS
+          </label>
+          <div class="select-wrapper">
+            <select id="deviceFilter" class="select">
+              <option value="all">All Devices</option>
+              <option value="iphone">iPhone</option>
+              <option value="ipad">iPad</option>
+              <option value="android">Android</option>
+              <option value="windows">Windows</option>
+              <option value="macos">macOS</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <span class="label-dot"></span>BROWSER
+          </label>
+          <div class="select-wrapper">
+            <select id="browserFilter" class="select">
+              <option value="all">All Browsers</option>
+              <option value="chrome">Chrome</option>
+              <option value="firefox">Firefox</option>
+              <option value="safari">Safari</option>
+              <option value="opera">Opera</option>
+              <option value="browser">Android Browser</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <span class="label-dot"></span>IN-APP BROWSER
+          </label>
+          <div class="select-wrapper">
+            <select id="inAppFilter" class="select">
+              <option value="none">None</option>
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+              <option value="fblite">FB Lite</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="snapchat">Snapchat</option>
+              <option value="tiktok">TikTok</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <span class="label-dot"></span>COUNTRY / LANGUAGE
+          </label>
+          <div class="select-wrapper">
+            <select id="countryFilter" class="select">
+              <option value="all">All Countries</option>
+              <option value="usa">USA (en-US)</option>
+              <option value="uk">UK (en-GB)</option>
+              <option value="india">India (en-IN)</option>
+              <option value="canada">Canada (en-CA)</option>
+              <option value="australia">Australia (en-AU)</option>
+              <option value="germany">Germany (de-DE)</option>
+              <option value="mexico">Mexico (es-MX)</option>
+              <option value="japan">Japan (ja-JP)</option>
+              <option value="netherlands">Netherlands (nl-NL)</option>
+              <option value="russia">Russia (ru-RU)</option>
+              <option value="turkey">Turkey (tr-TR)</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <span class="label-dot"></span>QUANTITY
+          </label>
+          <div class="quantity-wrapper">
+            <button class="qty-btn" id="qtyMinus">−</button>
+            <input type="number" id="quantityInput" class="qty-input" value="5" min="1" max="20" />
+            <button class="qty-btn" id="qtyPlus">+</button>
+          </div>
+          <span class="qty-hint">min: 1 · max: 20</span>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-primary" id="generateBtn" onclick="generateUserAgents()">
+          <span class="btn-icon">⚡</span>
+          Generate User Agents
+        </button>
+        <button class="btn btn-secondary" id="copyAllBtn" onclick="copyAllUA()" disabled>
+          <span class="btn-icon">⎘</span>
+          Copy All
+        </button>
+        <button class="btn btn-secondary" id="downloadBtn" onclick="downloadTXT()" disabled>
+          <span class="btn-icon">↓</span>
+          Download TXT
+        </button>
+        <button class="btn btn-danger" id="clearBtn" onclick="clearResults()" disabled>
+          <span class="btn-icon">✕</span>
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="statsBar" style="display:none;">
+      <div class="stat-item">
+        <span class="stat-val" id="statCount">0</span>
+        <span class="stat-lbl">GENERATED</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-val" id="statDevice">—</span>
+        <span class="stat-lbl">DEVICE</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-val" id="statBrowser">—</span>
+        <span class="stat-lbl">BROWSER</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-val" id="statCountry">—</span>
+        <span class="stat-lbl">LOCALE</span>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="output-section" id="outputSection" style="display:none;">
+      <div class="output-header">
+        <div class="card-label">// OUTPUT STREAM</div>
+        <div class="output-count" id="outputCount"></div>
+      </div>
+      <div class="output-box" id="outputBox"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span class="footer-text">[ USER_AGENT_GEN ] · Pure JavaScript · No Dependencies · v2.4.1</span>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
